@@ -1,0 +1,463 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #EFEBE6;
+  z-index: -1;
+}
+
+/* 固定頂部區域 */
+.fixedTop {
+  width: 100%;
+  position: relative;
+  z-index: 100;
+  height: 90px;
+}
+
+/* 頂部分隔線 */
+.topLine {
+  width: 100%;
+  height: 1px;
+  background-color: #99756A;
+  opacity: 0.3;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* 選單和返回按鈕 */
+.menuButtonContainer {
+  position: absolute;
+  top: 28px;
+  left: 20px;
+  z-index: 110;
+}
+
+.backButtonContainer {
+  position: absolute;
+  top: 28px;
+  right: 20px;
+  z-index: 110;
+}
+
+.backButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 重新製作按鈕 */
+.regenerateButtonContainer {
+  position: absolute;
+  top: 28px;
+  left: 244px;
+  z-index: 110;
+}
+
+.regenerateButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.regenerateIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.regenerateIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.regenerateText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.2em;
+  letter-spacing: 0.1em;
+  color: #000000;
+  text-align: center;
+}
+
+/* 列印按鈕 */
+.printButtonContainer {
+  position: absolute;
+  top: 28px;
+  left: 309px;
+  z-index: 110;
+}
+
+.printButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.printIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.printIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.printText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.2em;
+  letter-spacing: 0.1em;
+  color: #000000;
+  text-align: center;
+}
+
+/* 可滾動內容區域 */
+.scrollableContent {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50px;
+  /* 添加更順暢的滾動效果 */
+  scroll-behavior: smooth;
+  /* 隱藏滾動條但保持功能 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* 為Webkit瀏覽器自定義滾動條 */
+.scrollableContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollableContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollableContent::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+/* 學習單卡片通用樣式 */
+.sheetCard {
+  width: 350px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  padding: 20px;
+  position: relative;
+}
+
+/* 個人資訊區域 */
+.personalInfo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #D9D9D9;
+  margin-bottom: 20px;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 欄位樣式 */
+.infoField {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.fieldLabel {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.666;
+  letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.fieldInput {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #E5E5E5;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+}
+
+/* 導覽成就區域 */
+.achievement {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.achievementTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.428;
+  letter-spacing: 0.1em;
+  color: #1E1E1E;
+  margin-bottom: 15px;
+}
+
+.badgeContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.badgeImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 功能選單按鈕 */
+.menuDotsContainer {
+  position: absolute;
+  top: 15px;
+  right: 0;
+}
+
+.menuDotsIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 卡片標題樣式 */
+.cardTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+/* 學習內容卡片樣式 */
+.lessonCard {
+  width: 100%;
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.lessonTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.333;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 15px;
+}
+
+.lessonImageContainer {
+  width: 100%;
+  height: 150px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.lessonImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lessonSubtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 5px;
+}
+
+.lessonDescription {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.857;
+  letter-spacing: 0.1em;
+  color: #000000;
+}
+
+/* 互動記錄樣式 */
+.interactionRecord {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.857;
+  letter-spacing: 0.1em;
+  color: #000000;
+}
+
+/* 展品相關樣式 */
+.exhibitTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.857;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 15px;
+}
+
+.exhibitImageContainer {
+  width: 100%;
+  height: 200px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.exhibitImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* AI評論樣式 */
+.aiCommentContainer {
+  display: flex;
+  border: 1px solid #B1D4E0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.aiAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.aiAvatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.commentContent {
+  flex: 1;
+}
+
+.aiName {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 5px;
+}
+
+.aiComment {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  color: #000000;
+}
+
+/* 學習任務成果樣式 */
+.learningOutcome {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.857;
+  letter-spacing: 0.1em;
+  color: #000000;
+} 

@@ -1,0 +1,200 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #EFEBE6;
+  z-index: -1;
+}
+
+.teaFarmerImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.teaFarmerImage {
+  width: 12%;
+  height: auto;
+}
+
+.teaFarmerNameContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.teaFarmerName {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.428;
+  letter-spacing: 0.71%;
+  color: #000000;
+  text-align: center;
+  margin: 0;
+}
+
+.topLine {
+  width: 100%;
+  height: 1px;
+  background-color: #99756A;
+  opacity: 0.3;
+}
+
+/* 可滾動內容區域 */
+.contentContainer {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  /* 添加更順暢的滾動效果 */
+  scroll-behavior: smooth;
+  /* 隱藏滾動條但保持功能 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* 為Webkit瀏覽器自定義滾動條 */
+.contentContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contentContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.bottomLine {
+  width: 100%;
+  height: 1px;
+  background-color: #99756A;
+  margin-top: auto;
+  margin-bottom: 75px;
+  opacity: 0.3;
+}
+
+/* 新增: Wrapper for Bottom Bar */
+.bottomBarWrapper {
+  width: 380px; /* Or adjust as needed */
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  padding: 8px 15px;
+}
+
+/* 修改: Input Area within the wrapper */
+.bottomBarInputArea {
+  flex-grow: 1; /* Take available space */
+  min-height: 24px; /* Match typical input line height */
+  max-height: 100px; /* Limit max height */
+  overflow-y: auto;
+  cursor: text;
+  outline: none; /* Remove focus outline */
+  position: relative; /* For placeholder positioning */
+  word-wrap: break-word; /* Wrap long words */
+}
+
+/* 修改: Placeholder style relative to Input Area */
+.bottomBarInputArea.placeholder::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  position: absolute;
+  left: 0; /* Align to the start of the input area */
+  top: 0; /* Adjust if min-height doesn't align well */
+  /* transform: translateY(-50%); */ /* May not be needed */
+  pointer-events: none;
+  /* Ensure placeholder doesn't wrap */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* 修改: Container for icons */
+.bottomBarIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* Prevent icons from shrinking */
+  padding-left: 10px; /* Space between input area and icons */
+  user-select: none; /* Prevent selecting icons */
+  cursor: default; /* Default cursor over icons */
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-right: 10px; */ /* Remove specific margin if using gap */
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menuButtonContainer {
+  position: absolute;
+  top: 38px;
+  left: 29px;
+}
+
+.stopButtonContainer {
+  position: absolute;
+  top: 28px;
+  right: 20px;
+}
+
+.stopButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.stopIcon {
+  width: 24px;
+  height: 24px;
+} 

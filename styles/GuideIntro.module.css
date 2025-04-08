@@ -1,0 +1,137 @@
+.container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #EFEBE6;
+  z-index: -1;
+}
+
+.card {
+  width: 100%;
+  margin-top: auto;
+  background-color: #FFFFFF;
+  border-radius: 50px 50px 0 0;
+  box-shadow: 0px 2px 12px 0px rgba(102, 102, 102, 0.15);
+  padding: 30px 20px 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  z-index: 1;
+  margin-top: 214px;
+}
+
+.guideImageContainer {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.guideName {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.25em;
+  letter-spacing: 10%;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #000000;
+}
+
+.guideDescription {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5em;
+  letter-spacing: 10%;
+  text-align: left;
+  margin-bottom: 40px;
+  color: #000000;
+  max-width: 80%;
+}
+
+.confirmButton {
+  width: 175px;
+  height: 50px;
+  background-color: #1E1E1E;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1em;
+  letter-spacing: 10%;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.changeButton {
+  width: 175px;
+  height: 50px;
+  background-color: #FFFFFF;
+  border: 3px solid #1E1E1E;
+  border-radius: 10px;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1em;
+  letter-spacing: 10%;
+  color: #1E1E1E;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.navbarLeft {
+  margin-left: 10px;
+}
+
+.navbarRight {
+  margin-right: 10px;
+} 

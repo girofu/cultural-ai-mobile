@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+
+- postcss.config.js - 更新使用 @tailwindcss/postcss 而不是 tailwindcss
+- 安裝的依賴關係 - 新增了 @tailwindcss/postcss 包

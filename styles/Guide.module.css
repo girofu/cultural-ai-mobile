@@ -1,0 +1,232 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.main {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #EFEBE6;
+  z-index: -1;
+}
+
+/* 導航欄樣式 */
+.navbar {
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.backButton, .menuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowLeftIcon, .menuIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.navbarCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.navbarRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 標題區塊樣式 */
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  margin: 0;
+  color: #000000;
+  text-align: center;
+}
+
+.interrogationIcon {
+  width: 25px;
+  height: 25px;
+  margin-top: 5px;
+}
+
+/* 導覽員選擇區塊樣式 */
+.guideSelectionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+  padding: 0 20px;
+}
+
+.caretButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caretLeftIcon, .caretRightIcon {
+  width: 17px;
+  height: 27px;
+}
+
+.flipHorizontal {
+  transform: scaleX(-1);
+}
+
+.guideCard {
+  width: 236.486px;
+  height: 236.486px;
+  position: relative;
+  border: 3.78378px solid #1E1E1E;
+  border-radius: 7.09459px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.guideCardContent {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.guideCardImage {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.petitImage {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+.guideCardTitle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 61.4865px;
+  background-color: #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guideTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.3157894737;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: center;
+}
+
+/* 選擇按鈕樣式 */
+.selectButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  padding: 0 20px;
+}
+
+.selectButton {
+  background-color: #1E1E1E;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.selectButton:hover {
+  background-color: #333333;
+}
+
+.selectButton:active {
+  transform: translateY(2px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 響應式調整 */
+@media (max-width: 480px) {
+  .guideCard {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .guideCardTitle {
+    height: 50px;
+  }
+  
+  .guideTitle {
+    font-size: 22px;
+  }
+  
+  .selectButton {
+    width: 100%;
+    padding: 14px 20px;
+  }
+} 
