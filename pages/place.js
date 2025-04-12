@@ -30,6 +30,28 @@ export default function DesktopPlace() {
   // 根據螢幕寬度決定布局方向
   const isMobile = windowSize.width < 768;
 
+  // 請求相機權限並處理結果
+  const requestCameraPermission = async () => {
+    try {
+      // 顯示確認對話框
+      const confirmResult = window.confirm("是否允許開啟相機進行掃描？");
+
+      if (confirmResult) {
+        // 如果用戶同意對話框，嘗試請求相機權限
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        // 權限已獲得，跳轉到掃描頁面
+        router.push("/scan");
+      } else {
+        // 用戶在對話框中選擇取消，保持在當前頁面
+        console.log("用戶拒絕開啟相機權限");
+      }
+    } catch (error) {
+      // 用戶拒絕權限或發生其他錯誤
+      console.error("相機權限請求失敗:", error);
+      alert("無法獲取相機權限，請確認您的瀏覽器設定允許使用相機。");
+    }
+  };
+
   return (
     <div
       style={{
@@ -118,7 +140,7 @@ export default function DesktopPlace() {
           <PlaceButton
             text="掃瞄啟動條碼"
             icon="icon_qr_code"
-            onClick={() => router.push("/scan")}
+            onClick={requestCameraPermission}
             isMobile={isMobile}
           />
           <PlaceButton

@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import styles from "../styles/GuideStart.module.css";
 
 export default function SheetGenerating() {
   const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/sheet");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [router]);
 
   const handleMenu = () => {
     router.push("/");
