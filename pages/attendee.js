@@ -3,18 +3,20 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import MenuButton from "../components/MenuButton";
 import BackButton from "../components/BackButton";
+import layoutStyles from "../styles/Layout.module.css";
+import styles from "../styles/AttendeePage.module.css";
 
 const AttendeePage = () => {
   const router = useRouter();
 
   const handleSelectGroup = () => {
     // 導向導覽模式選擇頁面
-    router.push("/navigation-mode");
+    router.push("/mode");
   };
 
   const handleSelectIndividual = () => {
     // 導向導覽模式選擇頁面
-    router.push("/navigation-mode");
+    router.push("/mode");
   };
 
   const handleMenu = () => {
@@ -22,27 +24,35 @@ const AttendeePage = () => {
   };
 
   const handleBack = () => {
-    router.back();
+    router.push("/place");
+  };
+
+  // Function to handle key down events for accessibility
+  const handleKeyDown = (event, handler) => {
+    if (event.key === "Enter" || event.key === " ") {
+      handler();
+    }
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#EFEBE6] flex flex-col items-center">
+    <div className={styles.container}>
       <Head>
         <title>確認導覽人數 - 在地人AI導覽</title>
         <meta name="description" content="選擇導覽人數" />
       </Head>
 
-      <main className="flex flex-col items-center w-full max-w-md px-4 py-8">
-        {/* 導航欄 */}
-        <div className="w-full flex justify-between px-4 mb-8">
-          <MenuButton onClick={handleMenu} />
-          <BackButton onClick={handleBack} />
-        </div>
+      <div className={layoutStyles.menuButtonContainer}>
+        <MenuButton onClick={handleMenu} />
+      </div>
+      <div className={layoutStyles.stopButtonContainer}>
+        <BackButton onClick={handleBack} />
+      </div>
 
+      <main className={styles.mainContent}>
         {/* 標題部分 */}
-        <div className="flex items-center mb-12 mt-6">
-          <h1 className="text-3xl font-bold tracking-wider">確認導覽人數</h1>
-          <div className="ml-1 w-6 h-6 flex items-center justify-center">
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>確認導覽人數</h1>
+          <div className={styles.questionIconContainer}>
             <Image
               src="/images/all/question_icon.svg"
               alt="問號圖標"
@@ -53,43 +63,47 @@ const AttendeePage = () => {
         </div>
 
         {/* 選項部分 */}
-        <div className="flex flex-col gap-20 items-center w-full">
+        <div className={styles.optionsContainer}>
           {/* 團體選項 */}
           <div
-            className="flex flex-col items-center"
+            className={styles.option}
             onClick={handleSelectGroup}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => handleKeyDown(e, handleSelectGroup)}
           >
-            <div className="w-[154px] h-[154px] border-4 border-black rounded-xl bg-white/80 flex items-center justify-center mb-3 shadow-[0px_2px_12px_0px_rgba(102,102,102,0.15)]">
-              <div className="relative w-[100px] h-[100px]">
+            <div className={styles.optionBox}>
+              <div className={styles.groupIconContainer}>
                 <Image
                   src="/images/all/group_icon.svg"
                   alt="團體選項"
-                  width={100}
-                  height={100}
-                  className="object-contain"
+                  fill
+                  className={styles.iconImage}
                 />
               </div>
             </div>
-            <span className="text-2xl font-bold tracking-[0.28em]">團 體</span>
+            <span className={styles.optionText}>團 體</span>
           </div>
 
           {/* 個人選項 */}
           <div
-            className="flex flex-col items-center"
+            className={styles.option}
             onClick={handleSelectIndividual}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => handleKeyDown(e, handleSelectIndividual)}
           >
-            <div className="w-[154px] h-[154px] border-4 border-black rounded-xl bg-white/80 flex items-center justify-center mb-3 shadow-[0px_2px_12px_0px_rgba(102,102,102,0.15)]">
-              <div className="relative w-[58px] h-[77px]">
+            <div className={styles.optionBox}>
+              <div className={styles.individualIconContainer}>
                 <Image
                   src="/images/all/individual_icon.svg"
                   alt="個人選項"
-                  width={58}
-                  height={77}
-                  className="object-contain"
+                  fill
+                  className={styles.iconImage}
                 />
               </div>
             </div>
-            <span className="text-2xl font-bold tracking-[0.28em]">個 人</span>
+            <span className={styles.optionText}>個 人</span>
           </div>
         </div>
       </main>

@@ -7,7 +7,7 @@ export default function GuideEnd() {
   const router = useRouter();
 
   const handleMenu = () => {
-    router.push("/index");
+    router.push("/");
   };
 
   const handleStop = () => {

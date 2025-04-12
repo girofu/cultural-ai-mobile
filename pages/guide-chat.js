@@ -43,7 +43,7 @@ export default function GuideChat() {
   const [newMessage, setNewMessage] = useState("");
 
   const handleMenu = () => {
-    router.push("/index");
+    router.push("/");
   };
 
   const handleStop = () => {

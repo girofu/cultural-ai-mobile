@@ -4,6 +4,7 @@ import React from "react";
 import MenuButton from "../components/MenuButton";
 import BackButton from "../components/BackButton";
 import styles from "../styles/GuideIntro.module.css";
+import layoutStyles from "../styles/Layout.module.css";
 
 export default function GuideIntro() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function GuideIntro() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.push("/guide");
   };
 
   const handleConfirmGuide = () => {
@@ -34,12 +35,19 @@ export default function GuideIntro() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <div className={layoutStyles.menuButtonContainer}>
+        <MenuButton onClick={handleMenu} />
+      </div>
+      <div className={layoutStyles.stopButtonContainer}>
+        <BackButton onClick={handleBack} />
+      </div>
+
       <main className={styles.main}>
         {/* 背景色 */}
         <div className={styles.background}></div>
 
         {/* 白色圓角卡片 */}
-        <div className={styles.card}>
+        <div className={`${styles.card} pt-16`}>
           {/* 導覽員圖片 */}
           <div className={styles.guideImageContainer}>
             <img
@@ -66,16 +74,6 @@ export default function GuideIntro() {
           <button className={styles.changeButton} onClick={handleChangeGuide}>
             換一位導覽員
           </button>
-        </div>
-
-        {/* 頂部導航欄 */}
-        <div className={styles.navbar}>
-          <div className={styles.navbarLeft}>
-            <MenuButton onClick={handleMenu} />
-          </div>
-          <div className={styles.navbarRight}>
-            <BackButton onClick={handleBack} />
-          </div>
         </div>
       </main>
     </div>

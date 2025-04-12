@@ -4,6 +4,7 @@ import styles from "../styles/Guide.module.css";
 import { useState } from "react";
 import MenuButton from "../components/MenuButton";
 import BackButton from "../components/BackButton";
+import layoutStyles from "../styles/Layout.module.css";
 
 export default function Guide() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function Guide() {
   const guides = [
     { id: 0, name: "小資文青", image: "/images/all/petit_image.svg" },
     { id: 1, name: "美食家", image: "/images/all/petit_image.svg" },
-    { id: 2, name: "茶農阿伯", image: "/images/all/petit_image.svg" },
+    { id: 2, name: "茶農阿伯", image: "/images/all/tea_abe.svg" },
   ];
 
   const handleGuideChange = (direction) => {
@@ -24,7 +25,7 @@ export default function Guide() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.push("/mode");
   };
 
   const handleMenu = () => {
@@ -43,22 +44,16 @@ export default function Guide() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        {/* 背景色 */}
-        <div className={styles.background}></div>
+      <div className={layoutStyles.menuButtonContainer}>
+        <MenuButton onClick={handleMenu} />
+      </div>
+      <div className={layoutStyles.stopButtonContainer}>
+        <BackButton onClick={handleBack} />
+      </div>
 
-        {/* 頂部導航欄 */}
-        <div className={styles.navbar}>
-          <div className={styles.navbarLeft}>
-            <MenuButton onClick={handleMenu} />
-          </div>
-          <div className={styles.navbarRight}>
-            <BackButton onClick={handleBack} />
-          </div>
-        </div>
-
+      <main className="flex flex-col items-center w-full max-w-md relative pt-20">
         {/* 標題區塊 */}
-        <div className={styles.titleContainer}>
+        <div className={`${styles.titleContainer} mt-16 mb-8`}>
           <h1 className={styles.title}>確認您的導覽員</h1>
           <img
             src="/images/all/interrogation_icon.svg"

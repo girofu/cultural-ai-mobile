@@ -17,7 +17,7 @@ export default function Layout({
 
   // 如果沒有提供handleMenu和handleStop函數，使用默認行為
   const defaultHandleMenu = () => {
-    router.push("/index");
+    router.push("/");
   };
 
   const defaultHandleStop = () => {

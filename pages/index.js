@@ -184,10 +184,7 @@ export default function Home() {
 
         {/* 按鈕 */}
         <div>
-          <Button
-            onClick={() => router.push("/desktop_place")}
-            isMobile={isMobile}
-          />
+          <Button onClick={() => router.push("/place")} isMobile={isMobile} />
         </div>
       </main>
     </div>

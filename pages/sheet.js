@@ -9,7 +9,7 @@ export default function Sheet() {
   const contentRef = useRef(null);
 
   const handleMenu = () => {
-    router.push("/index");
+    router.push("/");
   };
 
   const handleBack = () => {

@@ -20,7 +20,7 @@ export default function GuideStart() {
   }, [messages]);
 
   const handleMenu = () => {
-    router.push("/index");
+    router.push("/");
   };
 
   const handleStop = () => {
