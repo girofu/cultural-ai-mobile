@@ -9,14 +9,18 @@ export default function GuideStart() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "您好，我是茶農阿伯，請問有什麼我可以為您解說的嗎？",
+      content:
+        "阿～您好！\n\n我是茶農阿伯，有超過50年製茶經驗喔。\n\n今天我要帶您了解茶葉的世界。\n\n我們有四個主題可以聊：\n\n1. 台灣木製出口茶箱\n2. 40~80年代製茶工具\n3. 茶葉的秤重與標價\n4. 包種茶的介紹\n\n您對哪個主題比較有興趣呢？\n\n隨時告訴我，阿伯很樂意為您解說喔！",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const dialogueEndRef = useRef(null);
+  const dialogueContainerRef = useRef(null);
 
   useEffect(() => {
-    dialogueEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (dialogueEndRef.current) {
+      dialogueEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleMenu = () => {
@@ -78,7 +82,7 @@ export default function GuideStart() {
       handleStop={handleStop}
       onSendMessage={handleSendMessage}
     >
-      <div className={styles.dialogueContainer}>
+      <div className={styles.dialogueContainer} ref={dialogueContainerRef}>
         {messages.map((msg, index) => (
           <div
             key={index}

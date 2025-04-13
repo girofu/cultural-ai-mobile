@@ -29,7 +29,15 @@ function TypingEffect({ text = "", speed = 50, onComplete }) {
     }
   }, [currentIndex, text, speed, displayedText, onComplete]); // Add displayedText and onComplete to dependencies
 
-  return <>{displayedText}</>; // Use Fragment to avoid extra div
+  // 轉換換行符為 <br> 標籤
+  const formattedText = displayedText.split("\n").map((line, index, array) => (
+    <React.Fragment key={index}>
+      {line}
+      {index < array.length - 1 && <br />}
+    </React.Fragment>
+  ));
+
+  return <>{formattedText}</>; // 使用 Fragment 避免多餘的 div
 }
 
 export default TypingEffect;

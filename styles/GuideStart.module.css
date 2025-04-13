@@ -135,13 +135,34 @@
   gap: 10px; /* 訊息間距 */
   padding: 10px;
   width: 100%; /* 確保容器寬度 */
+  flex: 1; /* 佔據剩餘空間 */
+  overflow-y: auto; /* 允許垂直滾動 */
+  position: relative; /* 設置為相對定位 */
+  margin-bottom: 0; /* 與底部線保持對齊 */
+  scrollbar-width: thin; /* 美化滾動條（Firefox） */
+  -ms-overflow-style: none; /* 隱藏IE滾動條 */
+  max-height: calc(100vh - 220px); /* 設置最大高度，確保不超過底線 */
+}
+
+.dialogueContainer::-webkit-scrollbar {
+  width: 6px; /* 設置滾動條寬度 */
+}
+
+.dialogueContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(153, 117, 106, 0.3); /* 設置滾動條顏色，與 bottomLine 相同 */
+  border-radius: 3px; /* 滾動條圓角 */
+}
+
+.dialogueContainer::-webkit-scrollbar-track {
+  background: rgba(239, 235, 230, 0.5); /* 背景稍微透明 */
 }
 
 .message {
   padding: 10px 15px;
+  margin: 10px 0;
   border-radius: 15px;
-  max-width: 70%; /* 限制訊息最大寬度 */
-  word-wrap: break-word; /* 長單詞換行 */
+  max-width: 80%;
+  white-space: pre-wrap;
 }
 
 .abeMessage {
@@ -151,10 +172,18 @@
   border-bottom-left-radius: 0; /* 左下角直角 */
 }
 
+.assistantMessage {
+  align-self: flex-start;
+  background-color: #e9f5ff;
+  color: #333;
+  margin-right: auto;
+}
+
 .userMessage {
-  background-color: #007bff; /* 用戶訊息背景色 */
-  color: white;
-  align-self: flex-end; /* 用戶訊息靠右 */
+  align-self: flex-end;
+  background-color: #e3ffe3;
+  color: #333;
+  margin-left: auto;
   border-bottom-right-radius: 0; /* 右下角直角 */
 }
 
