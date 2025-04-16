@@ -1,12 +1,25 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import MenuButton from "../components/MenuButton";
 import styles from "../styles/Sheet.module.css";
+import epsonPrintService from "../services/epsonPrintService";
 
 export default function Sheet() {
   const router = useRouter();
   const contentRef = useRef(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [printMessage, setPrintMessage] = useState(null);
+
+  useEffect(() => {
+    // 確保環境變數已經設定
+    if (
+      typeof window !== "undefined" &&
+      !process.env.NEXT_PUBLIC_EPSON_API_KEY
+    ) {
+      console.warn("未設定 EPSON_API_KEY 環境變數");
+    }
+  }, []);
 
   const handleMenu = () => {
     router.push("/");
@@ -14,6 +27,81 @@ export default function Sheet() {
 
   const handleBack = () => {
     router.push("/guide-end");
+  };
+
+  // 處理列印功能
+  const handlePrint = async () => {
+    try {
+      setIsPrinting(true);
+      setPrintMessage({ type: "info", text: "正在準備列印..." });
+
+      // 獲取要列印的內容區域 (僅 top line 以下的部分)
+      const contentElement = contentRef.current;
+      if (!contentElement) {
+        throw new Error("找不到要列印的內容");
+      }
+
+      // 創建一個簡化版本的內容用於列印
+      const simplifiedContent = document.createElement("div");
+      simplifiedContent.style.padding = "20px";
+      simplifiedContent.style.backgroundColor = "#fff";
+      simplifiedContent.style.width = "210mm"; // A4 寬度
+      simplifiedContent.style.margin = "0 auto";
+
+      // 添加標題
+      const title = document.createElement("h1");
+      title.textContent = "在地人AI導覽 - 學習單";
+      title.style.textAlign = "center";
+      title.style.marginBottom = "20px";
+      simplifiedContent.appendChild(title);
+
+      // 只複製必要的內容（不含圖片）
+      const infoSection = document.createElement("div");
+      infoSection.innerHTML = `
+        <h2 style="margin-top: 20px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">個人資訊</h2>
+        <p><strong>姓名:</strong> 畢小功</p>
+        <p><strong>參觀日期:</strong> 2025/03/20</p>
+        <p><strong>停留時間:</strong> 1 小時 15 分鐘</p>
+        <p><strong>AI導覽員:</strong> 茶農阿伯</p>
+        <p><strong>導覽模式:</strong> 固定路線 - 茶葉文化</p>
+        
+        <h2 style="margin-top: 20px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">學習內容摘要</h2>
+        <p><strong>台灣茶葉的歷史</strong> - 早期茶葉會裝在有錫箔內襯的木箱中，運送到英國和日本</p>
+        <p><strong>製茶流程</strong> - 茶葉從採收、曬菁、揉捻、烘焙，每一步都影響香氣</p>
+        <p><strong>茶行的日常</strong> - 老闆會用秤子秤重後再計價，有時還會寫在木牌上</p>
+        
+        <h2 style="margin-top: 20px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">AI 導覽互動紀錄</h2>
+        <p>✔ 我參加了「包種茶是什麼？」小測驗，答對了！</p>
+        <p>✔ 我完成了茶葉製程排序遊戲：採茶 ➡ 曬菁 ➡ 揉捻 ➡ 烘焙</p>
+        <p>✔ 我對「杉木茶箱的防潮設計」表示「覺得很酷！」👍</p>
+        
+        <h2 style="margin-top: 20px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">學習任務成果</h2>
+        <p>🧠 我學到了：</p>
+        <p>✔ 杉木茶箱怎麼幫助保存茶葉香氣</p>
+        <p>✔ 製茶流程中最重要的是「烘焙」</p>
+        <p>✔ 茶葉以前是出口大宗，是台灣經濟很重要的一部分</p>
+        <p>📜 AI 為我生成了一張：「茶知識小達人」證書！</p>
+      `;
+      simplifiedContent.appendChild(infoSection);
+
+      // 呼叫 Epson 列印服務
+      const result = await epsonPrintService.printContent(simplifiedContent);
+
+      if (result.success) {
+        setPrintMessage({ type: "success", text: "列印請求已發送" });
+      } else {
+        setPrintMessage({ type: "error", text: `列印錯誤: ${result.message}` });
+      }
+    } catch (error) {
+      console.error("列印過程中發生錯誤:", error);
+      setPrintMessage({ type: "error", text: `列印錯誤: ${error.message}` });
+    } finally {
+      setTimeout(() => {
+        setIsPrinting(false);
+        // 3秒後清除訊息
+        setTimeout(() => setPrintMessage(null), 3000);
+      }, 1000);
+    }
   };
 
   return (
@@ -62,7 +150,11 @@ export default function Sheet() {
 
           {/* 列印按鈕 */}
           <div className={styles.printButtonContainer}>
-            <button className={styles.printButton}>
+            <button
+              className={styles.printButton}
+              onClick={handlePrint}
+              disabled={isPrinting}
+            >
               <div className={styles.printIconContainer}>
                 <img
                   src="/images/all/icon_printer.svg"
@@ -70,9 +162,22 @@ export default function Sheet() {
                   className={styles.printIcon}
                 />
               </div>
-              <span className={styles.printText}>立刻列印</span>
+              <span className={styles.printText}>
+                {isPrinting ? "列印中..." : "立刻列印"}
+              </span>
             </button>
           </div>
+
+          {/* 列印訊息提示 */}
+          {printMessage && (
+            <div
+              className={`${styles.printMessage} ${
+                styles[`print-${printMessage.type}`]
+              }`}
+            >
+              {printMessage.text}
+            </div>
+          )}
 
           {/* 頂部分隔線 */}
           <div className={styles.topLine}></div>
