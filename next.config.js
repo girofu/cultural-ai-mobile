@@ -5,11 +5,11 @@ const nextConfig = {
     buildActivity: false,
   },
   experimental: {
-    serverComponentsExternalPackages: [],
     serverActions: {
       bodySizeLimit: "50mb",
     },
   },
+  serverExternalPackages: [],
 };
 
 module.exports = nextConfig;

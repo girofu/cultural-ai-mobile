@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "html2pdf.js": "^0.10.3",
     "html5-qrcode": "^2.3.8",
     "next": "^15.2.4",

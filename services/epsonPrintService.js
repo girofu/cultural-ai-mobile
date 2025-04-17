@@ -13,6 +13,16 @@ class EpsonPrintService {
     this.clientId = process.env.EPSON_CLIENT_ID;
     this.clientSecret = process.env.EPSON_CLIENT_SECRET;
     this.deviceToken = null;
+    this.authorizationCode = null;
+  }
+
+  /**
+   * 設置授權碼
+   * @param {string} code 授權碼
+   */
+  setAuthorizationCode(code) {
+    this.authorizationCode = code;
+    console.log("已設置授權碼:", code.substring(0, 10) + "...");
   }
 
   /**
@@ -21,15 +31,19 @@ class EpsonPrintService {
    */
   async getDeviceToken() {
     try {
+      // 準備 Basic Auth 憑證
+      const credentials = Buffer.from(
+        `${this.clientId}:${this.clientSecret}`
+      ).toString("base64");
+
       const response = await fetch(EPSON_AUTH_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${credentials}`,
           "x-api-key": this.apiKey,
         },
         body: new URLSearchParams({
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
           grant_type: "client_credentials",
         }),
       });
@@ -166,6 +180,11 @@ class EpsonPrintService {
    */
   async printContent(contentElement) {
     try {
+      // 檢查是否有授權碼
+      if (!this.authorizationCode) {
+        throw new Error("尚未設置授權碼，請先完成印表機授權");
+      }
+
       // 將HTML內容轉換為PDF
       const pdfBlob = await this.convertToPdf(contentElement);
 
@@ -180,6 +199,7 @@ class EpsonPrintService {
         },
         body: JSON.stringify({
           pdfData: base64Data,
+          authorizationCode: this.authorizationCode,
         }),
       });
 
@@ -187,6 +207,18 @@ class EpsonPrintService {
 
       if (!response.ok) {
         throw new Error(result.error || "列印請求失敗");
+      }
+
+      // 如果回應中有設備令牌資訊，可以存儲刷新令牌供後續使用
+      if (result.deviceTokenInfo && result.deviceTokenInfo.refresh_token) {
+        console.log("已獲取刷新令牌，可用於後續列印操作");
+        // 這裡可以存儲刷新令牌到 localStorage 或其他地方
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            "epsonRefreshToken",
+            result.deviceTokenInfo.refresh_token
+          );
+        }
       }
 
       return { success: true, message: result.message || "列印請求已發送" };
