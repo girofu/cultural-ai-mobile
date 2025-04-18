@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import MenuButton from "../components/MenuButton";
@@ -7,6 +7,16 @@ import styles from "../styles/Sheet.module.css";
 export default function Sheet() {
   const router = useRouter();
   const contentRef = useRef(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [printStatus, setPrintStatus] = useState("");
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printLogs, setPrintLogs] = useState([]);
+  const [printError, setPrintError] = useState(null);
+  const [printStages, setPrintStages] = useState([]);
+  const [showDetailedLogs, setShowDetailedLogs] = useState(false);
+  const [printSettings, setPrintSettings] = useState(null);
+  const [settingsAdjustments, setSettingsAdjustments] = useState([]);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   const handleMenu = () => {
     router.push("/");
@@ -14,6 +24,217 @@ export default function Sheet() {
 
   const handleBack = () => {
     router.push("/guide-end");
+  };
+
+  // 處理列印按鈕點擊
+  const handlePrint = async () => {
+    setShowPrintModal(true);
+    // 重置所有狀態
+    setPrintLogs([]);
+    setPrintError(null);
+    setPrintStages([]);
+    setPrintSettings(null);
+    setSettingsAdjustments([]);
+    setShowDetailedLogs(false);
+    setIsDemoMode(false);
+  };
+
+  // 記錄列印日誌
+  const logPrint = (message, type = "info") => {
+    const timestamp = new Date().toLocaleTimeString();
+    const log = { timestamp, message, type };
+    console.log(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+    setPrintLogs((prev) => [...prev, log]);
+  };
+
+  // Demo 模式下的列印
+  const printDemo = async () => {
+    try {
+      setIsPrinting(true);
+      setPrintStatus("正在準備列印 Demo 模板...");
+      logPrint("開始處理 Demo 列印請求");
+
+      // 使用模板 PDF 的路徑
+      const templatePath = "/images/all/學習單template.pdf";
+      logPrint(`使用模板文件: ${templatePath}`);
+
+      // 發送列印請求到伺服器，標記為 demo 模式
+      const response = await fetch("/api/epson-print", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isDemo: true,
+          templatePath,
+        }),
+      });
+
+      const data = await response.json();
+
+      // 設置列印階段記錄
+      if (data.printLog && data.printLog.stages) {
+        setPrintStages(data.printLog.stages);
+
+        // 記錄每個階段到日誌
+        data.printLog.stages.forEach((stage) => {
+          const statusType = stage.status === "error" ? "error" : "info";
+          logPrint(`${stage.name}: ${stage.status}`, statusType);
+        });
+      }
+
+      // 處理列印設定和調整
+      if (data.printSettings) {
+        setPrintSettings(data.printSettings);
+        logPrint("已根據印表機能力優化列印設定", "info");
+      }
+
+      if (data.settingsAdjustments && data.settingsAdjustments.length > 0) {
+        setSettingsAdjustments(data.settingsAdjustments);
+        logPrint(
+          `列印設定已進行 ${data.settingsAdjustments.length} 項調整`,
+          "info"
+        );
+      }
+
+      if (!response.ok) {
+        // 設置詳細的錯誤信息
+        setPrintError({
+          code: data.code || "UNKNOWN_ERROR",
+          message: data.error || "列印失敗",
+          details: data.printLog || null,
+        });
+
+        logPrint(`錯誤代碼: ${data.code || "UNKNOWN_ERROR"}`, "error");
+        logPrint(`錯誤訊息: ${data.error || "列印失敗"}`, "error");
+        throw new Error(data.error || "列印失敗");
+      }
+
+      setPrintStatus("列印任務已成功提交!");
+      logPrint("列印任務已成功提交!", "success");
+
+      if (data.jobId) {
+        logPrint(`列印工作ID: ${data.jobId}`, "success");
+      }
+
+      if (data.deviceInfo) {
+        logPrint(`印表機: ${data.deviceInfo.productName || "未知"}`, "info");
+      }
+    } catch (error) {
+      setPrintStatus(`列印失敗: ${error.message}`);
+      logPrint(`列印失敗: ${error.message}`, "error");
+      console.error("列印時發生錯誤:", error);
+    }
+  };
+
+  // 確認列印
+  const confirmPrint = async () => {
+    // 如果是 Demo 模式，使用 printDemo 函數
+    if (isDemoMode) {
+      await printDemo();
+      return;
+    }
+
+    try {
+      setIsPrinting(true);
+      setPrintStatus("正在準備列印...");
+      logPrint("開始處理列印請求");
+
+      // 獲取當前頁面的URL
+      const pageUrl = window.location.href;
+      logPrint(`使用頁面URL: ${pageUrl}`);
+
+      // 獲取設備資訊
+      logPrint("發送列印請求到伺服器");
+      const response = await fetch("/api/epson-print", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pageUrl }),
+      });
+
+      const data = await response.json();
+
+      // 設置列印階段記錄
+      if (data.printLog && data.printLog.stages) {
+        setPrintStages(data.printLog.stages);
+
+        // 記錄每個階段到日誌
+        data.printLog.stages.forEach((stage) => {
+          const statusType = stage.status === "error" ? "error" : "info";
+          logPrint(`${stage.name}: ${stage.status}`, statusType);
+        });
+      }
+
+      // 處理列印設定和調整
+      if (data.printSettings) {
+        setPrintSettings(data.printSettings);
+        logPrint("已根據印表機能力優化列印設定", "info");
+      }
+
+      if (data.settingsAdjustments && data.settingsAdjustments.length > 0) {
+        setSettingsAdjustments(data.settingsAdjustments);
+        logPrint(
+          `列印設定已進行 ${data.settingsAdjustments.length} 項調整`,
+          "info"
+        );
+      }
+
+      if (!response.ok) {
+        // 設置詳細的錯誤信息
+        setPrintError({
+          code: data.code || "UNKNOWN_ERROR",
+          message: data.error || "列印失敗",
+          details: data.printLog || null,
+        });
+
+        logPrint(`錯誤代碼: ${data.code || "UNKNOWN_ERROR"}`, "error");
+        logPrint(`錯誤訊息: ${data.error || "列印失敗"}`, "error");
+        throw new Error(data.error || "列印失敗");
+      }
+
+      setPrintStatus("列印任務已成功提交!");
+      logPrint("列印任務已成功提交!", "success");
+
+      if (data.jobId) {
+        logPrint(`列印工作ID: ${data.jobId}`, "success");
+      }
+
+      if (data.deviceInfo) {
+        logPrint(`印表機: ${data.deviceInfo.productName || "未知"}`, "info");
+      }
+
+      // 顯示成功訊息後不自動關閉，讓用戶可以查看詳細資訊
+    } catch (error) {
+      setPrintStatus(`列印失敗: ${error.message}`);
+      logPrint(`列印失敗: ${error.message}`, "error");
+      console.error("列印時發生錯誤:", error);
+    }
+  };
+
+  // 取消列印
+  const cancelPrint = () => {
+    setShowPrintModal(false);
+    setIsPrinting(false);
+    setPrintStatus("");
+  };
+
+  // 切換顯示詳細日誌
+  const toggleDetailedLogs = () => {
+    setShowDetailedLogs(!showDetailedLogs);
+  };
+
+  // 關閉列印對話框
+  const closePrintDialog = () => {
+    setShowPrintModal(false);
+    setIsPrinting(false);
+    setPrintStatus("");
+    setPrintLogs([]);
+    setPrintError(null);
+    setPrintStages([]);
+    setPrintSettings(null);
+    setSettingsAdjustments([]);
   };
 
   return (
@@ -62,7 +283,7 @@ export default function Sheet() {
 
           {/* 列印按鈕 */}
           <div className={styles.printButtonContainer}>
-            <button className={styles.printButton}>
+            <button className={styles.printButton} onClick={handlePrint}>
               <div className={styles.printIconContainer}>
                 <img
                   src="/images/all/icon_printer.svg"
@@ -281,6 +502,188 @@ export default function Sheet() {
           </div>
         </div>
       </main>
+
+      {/* 列印確認modal */}
+      {showPrintModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3 className={styles.modalTitle}>
+              {isPrinting ? "列印狀態" : "確認列印"}
+            </h3>
+
+            {isPrinting ? (
+              <div className={styles.printingStatus}>
+                <div className={styles.loadingSpinner}></div>
+                <p className={styles.printStatusText}>{printStatus}</p>
+
+                {printError && (
+                  <div className={styles.errorContainer}>
+                    <p className={styles.errorCode}>
+                      錯誤代碼: {printError.code}
+                    </p>
+                    <p className={styles.errorMessage}>
+                      錯誤訊息: {printError.message}
+                    </p>
+                  </div>
+                )}
+
+                {/* 顯示列印設定調整 */}
+                {settingsAdjustments.length > 0 && (
+                  <div className={styles.settingsAdjustmentsContainer}>
+                    <h4 className={styles.settingsAdjustmentsTitle}>
+                      列印設定已根據印表機能力進行調整
+                    </h4>
+                    <ul className={styles.settingsAdjustmentsList}>
+                      {settingsAdjustments.map((adjustment, index) => (
+                        <li key={index} className={styles.adjustmentItem}>
+                          {adjustment}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {printSettings && (
+                  <div className={styles.printSettingsContainer}>
+                    <button
+                      className={styles.toggleSettingsButton}
+                      onClick={() => setShowDetailedLogs(!showDetailedLogs)}
+                    >
+                      {showDetailedLogs ? "隱藏列印設定" : "顯示列印設定"}
+                    </button>
+
+                    {showDetailedLogs && (
+                      <div className={styles.printSettingsDetails}>
+                        <p>
+                          <strong>紙張大小:</strong> {printSettings.paperSize}
+                        </p>
+                        <p>
+                          <strong>紙張類型:</strong> {printSettings.paperType}
+                        </p>
+                        <p>
+                          <strong>無邊框:</strong>{" "}
+                          {printSettings.borderless ? "是" : "否"}
+                        </p>
+                        <p>
+                          <strong>列印品質:</strong>{" "}
+                          {printSettings.printQuality}
+                        </p>
+                        <p>
+                          <strong>紙張來源:</strong> {printSettings.paperSource}
+                        </p>
+                        <p>
+                          <strong>顏色模式:</strong> {printSettings.colorMode}
+                        </p>
+                        <p>
+                          <strong>雙面列印:</strong> {printSettings.doubleSided}
+                        </p>
+                        <p>
+                          <strong>反向順序:</strong>{" "}
+                          {printSettings.reverseOrder ? "是" : "否"}
+                        </p>
+                        <p>
+                          <strong>列印數量:</strong> {printSettings.copies}
+                        </p>
+                        <p>
+                          <strong>自動分頁:</strong>{" "}
+                          {printSettings.collate ? "是" : "否"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {printLogs.length > 0 && (
+                  <div className={styles.logsContainer}>
+                    <button
+                      className={styles.toggleLogsButton}
+                      onClick={toggleDetailedLogs}
+                    >
+                      {showDetailedLogs ? "隱藏詳細日誌" : "顯示詳細日誌"}
+                    </button>
+
+                    {showDetailedLogs && (
+                      <div className={styles.logsList}>
+                        {printLogs.map((log, index) => (
+                          <div
+                            key={index}
+                            className={`${styles.logItem} ${
+                              styles[
+                                `logType${
+                                  log.type.charAt(0).toUpperCase() +
+                                  log.type.slice(1)
+                                }`
+                              ]
+                            }`}
+                          >
+                            <span className={styles.logTime}>
+                              {log.timestamp}
+                            </span>
+                            <span className={styles.logMessage}>
+                              {log.message}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className={styles.modalButtons}>
+                  <button
+                    className={styles.modalButtonClose}
+                    onClick={closePrintDialog}
+                  >
+                    關閉
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className={styles.modalText}>您確定要列印這份學習單嗎？</p>
+                <div className={styles.printModeOptions}>
+                  <div className={styles.printModeOption}>
+                    <input
+                      type="radio"
+                      id="normalMode"
+                      name="printMode"
+                      checked={!isDemoMode}
+                      onChange={() => setIsDemoMode(false)}
+                    />
+                    <label htmlFor="normalMode">正常列印</label>
+                  </div>
+                  <div className={styles.printModeOption}>
+                    <input
+                      type="radio"
+                      id="demoMode"
+                      name="printMode"
+                      checked={isDemoMode}
+                      onChange={() => setIsDemoMode(true)}
+                    />
+                    <label htmlFor="demoMode">Demo模式 (使用模板)</label>
+                  </div>
+                </div>
+                <div className={styles.modalButtons}>
+                  <button
+                    className={styles.modalButtonCancel}
+                    onClick={cancelPrint}
+                    disabled={isPrinting}
+                  >
+                    取消
+                  </button>
+                  <button
+                    className={styles.modalButtonConfirm}
+                    onClick={confirmPrint}
+                    disabled={isPrinting}
+                  >
+                    確認列印
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,631 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+
+
+## 詳細列印 API 流程：
+
+設備認證：
+
+1. 引導使用者訪問: https://auth.epsonconnect.com/auth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope=device
+
+2. 使用者登入並選擇印表機後，獲得 authorization_code
+
+3. 使用 authorization_code 交換 access_token: POST https://auth.epsonconnect.com/auth/token
+
+列印流程：
+
+1. 獲取印表機能力: GET https://api.epsonconnect.com/api/2/printing/capability/{printMode}
+
+2. 創建列印任務: POST https://api.epsonconnect.com/api/2/printing/jobs
+
+3. 上傳文件: POST <uploadUri>&File=1.pdf
+
+4. 執行列印: POST https://api.epsonconnect.com/api/2/printing/jobs/{jobId}/print
+
+當 access_token 過期 (1小時後)，使用 refresh_token 獲取新的 token。若 refresh_token 也過期 (30天後)，使用者需重新授權。
+
+
+# epson api docs
+
+請根據以下的功能種類更新 api 請求程式與回傳：\
+\
+功能1：\
+///\
+## File upload
+
+**post** /data
+
+Upload the file to be printed.\
+The file size limit is 20MB.\
+\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://upload.epsonconnect.com/data?Key=0f2b03323c91517ef779261c996e2c4a0bea16362c5de628e610d623b5b1fd29&File=1.jpg>",\
+  "method": "POST",\
+  "headers": {}\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+///\
+\
+功能2：\
+///\
+function：\
+
+## Printing
+
+**post** /printing/jobs/{jobId}/print
+
+Starts printing for the specified print job.\
+This API uses Bearer Authentication with a device token.\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/jobs/886ba15084e744c98d9913786bbaf1ac/print>",\
+  "method": "POST",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+\
+///\
+\
+功能3：\
+///\
+function：\
+## Cancel Printing
+
+**post** /printing/jobs/{jobId}/cancel
+
+Cancels printing for the specified print job.\
+You cannot cancel a job that the printer has started printing.\
+If you need to do so, cancel printing on the printer itself.\
+This API uses Bearer Authentication with a device token.\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/jobs/886ba15084e744c98d9913786bbaf1ac/cancel>",\
+  "method": "POST",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+\
+///\
+\
+功能4：\
+///\
+function：\
+## Get Print Job Information
+
+**get** /printing/jobs/{jobId}
+
+Gets information about the specified print job.\
+This API uses Bearer Authentication with a device token.\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/jobs/886ba15084e744c98d9913786bbaf1ac>",\
+  "method": "GET",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+{\
+  "status": "completed",\
+  "jobName": "sample",\
+  "totalPages": 1,\
+  "startDate": "2021-08-06 02:00:45",\
+  "updateDate": "2021-08-06 02:01:26"\
+}\
+///\
+\
+功能5：\
+///\
+function：\
+## Get Default Print Settings
+
+**get** /printing/capability/default
+
+Gets the default print settings for the specified device.\
+This API uses Bearer Authentication with a device token.\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/capability/default>",\
+  "method": "GET",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+{\
+  "printSettings": {\
+    "paperSize": "ps_legal",\
+    "paperType": "pt_plainpaper",\
+    "borderless": false,\
+    "printQuality": "normal",\
+    "paperSource": "front2",\
+    "colorMode": "color",\
+    "doubleSided": "none",\
+    "reverseOrder": false,\
+    "copies": 1,\
+    "collate": true\
+  }\
+}\
+///\
+\
+功能6：\
+///\
+function：\
+## Get Notification Information
+
+**get** /printing/settings/notification
+
+Gets information about the specified device.\
+This API uses Bearer Authentication with a device token\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/settings/notification>",\
+  "method": "GET",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+{\
+  "notification": true,\
+  "callbackUri": "<http://example.com>"\
+}\
+///\
+\
+功能7：\
+///\
+function：\
+## Notification Information Settings
+
+**post** /printing/settings/notification
+
+Specifies settings for receiving changes in the status of print jobs.\
+This API uses Bearer Authentication with an application token.\
+Notifications are sent at the following times:\
+・When printing is paused (out of paper, paper jam, or out of ink).\
+・When a print job ends (successfully, cancellation, or error)\
+・When a print job is deleted due to expiration
+
+\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/settings/notification>",\
+  "method": "POST",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB",\
+    "content-type": "application/json"\
+  }\
+  "processData": false,\
+  "data": "{\\"notification\\":true,\\"callbackUri\\":\\"<http://example.com\>"}"\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+\
+///\
+\
+功能8：\
+///\
+function：\
+## Get Printing Capacity
+
+**get** /printing/capability/{printMode}
+
+Gets the printing capacity of the specified device.\
+This API uses Bearer Authentication with a device token.
+
+\
+api 請求：\
+const settings = {\
+  "async": true,\
+  "crossDomain": true,\
+  "url": "<https://api.epsonconnect.com/api/2/printing/capability/document>",\
+  "method": "GET",\
+  "headers": {\
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",\
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"\
+  }\
+};\
+\
+$.ajax(settings).done(function (response) {\
+  console.log(response);\
+});\
+回傳：\
+{\
+  "colorModes": \[\
+    "color",\
+    "mono"\
+  \],\
+  "resolutions": \[\
+    300,\
+    600\
+  \],\
+  "paperSizes": \[\
+    {\
+      "paperSize": "ps_legal",\
+      "paperTypes": \[\
+        {\
+          "paperType": "pt_plainpaper",\
+          "borderless": false,\
+          "paperSources": \[\
+            "front2"\
+          \],\
+          "printQualities": \[\
+            "normal",\
+            "high"\
+          \],\
+          "doubleSided": false\
+        }\
+      \]\
+    }\
+  \]\
+}\
+///
+
+
+
+## 9\. Get Device Information
+
+**get** /printing/devices/info\
+\
+api: \
+const settings = {
+
+  "async": true,
+
+  "crossDomain": true,
+
+  "url": "<https://api.epsonconnect.com/api/2/printing/devices/info>",
+
+  "method": "GET",
+
+  "headers": {
+
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",
+
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB"
+
+  }
+
+};
+
+$.ajax(settings).done(function (response) {
+
+  console.log(response);
+
+});
+
+
+
+response:
+
+{
+
+  "productName": "DummyPrinter",
+
+  "serialNumber": "ABCDE12345",
+
+  "connected": true
+
+}
+
+
+
+## 10\. Create Printing Job
+
+**post** /printing/jobs
+
+Configures the print settings and issues the print job ID and file upload URI.\
+Please specify the values according to the print settings obtained from the Get Print Capability API.\
+The print job will expire after 3 days.\
+This API uses Bearer Authentication with a device token.
+
+
+
+const settings = {
+
+  "async": true,
+
+  "crossDomain": true,
+
+  "url": "<https://api.epsonconnect.com/api/2/printing/jobs>",
+
+  "method": "POST",
+
+  "headers": {
+
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",
+
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB",
+
+    "content-type": "application/json"
+
+  }
+
+  "processData": false,
+
+  "data": "{\\"jobName\\":\\"sample\\",\\"printMode\\":\\"document\\",\\"printSettings\\":{\\"paperSize\\":\\"ps_a4\\",\\"paperType\\":\\"pt_plainpaper\\",\\"borderless\\":false,\\"printQuality\\":\\"normal\\",\\"paperSource\\":\\"front2\\",\\"colorMode\\":\\"mono\\",\\"doubleSided\\":\\"none\\",\\"reverseOrder\\":false,\\"copies\\":1,\\"collate\\":true}}"
+
+};
+
+$.ajax(settings).done(function (response) {
+
+  console.log(response);
+
+});
+
+
+
+**REQUEST**
+
+**REQUEST BODYapplication/json**
+
+{
+
+  "jobName": "sample",
+
+  "printMode": "document",
+
+  "printSettings": {
+
+    "paperSize": "ps_a4",
+
+    "paperType": "pt_plainpaper",
+
+    "borderless": false,
+
+    "printQuality": "normal",
+
+    "paperSource": "front2",
+
+    "colorMode": "mono",
+
+    "doubleSided": "none",
+
+    "reverseOrder": false,
+
+    "copies": 1,
+
+    "collate": true
+
+  }
+
+}
+
+
+
+**RESPONSE**
+
+{
+
+  "jobId": "886ba15084e744c98d9913786bbaf1ac",
+
+  "uploadUri": "<https://example.com/data?Key=uploadkey>"
+
+}
+
+
+
+## 11\. Duplicate Print Job
+
+**post** /printing/jobs/copy
+
+Duplicates the print job and issues a new print job ID.\
+If you specify print settings, you can change only the specified print settings from the settings of the original print job.\
+This API uses Bearer Authentication with a device token.
+
+
+
+**CODE SAMPLES**
+
+const settings = {
+
+  "async": true,
+
+  "crossDomain": true,
+
+  "url": "<https://api.epsonconnect.com/api/2/printing/jobs/copy>",
+
+  "method": "POST",
+
+  "headers": {
+
+    "Authorization": "Bearer B-Tcytwjnm9818P9mb3V9lsnHFMHki3FeDgsOFQSu_I",
+
+    "x-api-key": "MGTNVvnVmmFbYasgApRtuXC7t8EDMcRxDRvMZTZB",
+
+    "content-type": "application/json"
+
+  }
+
+  "processData": false,
+
+  "data": "{\\"fromJobId\\":\\"886ba15084e744c98d9913786bbaf1ac\\",\\"jobName\\":\\"sample\\",\\"printSettings\\":{\\"paperSize\\":\\"ps_a4\\",\\"paperType\\":\\"pt_plainpaper\\",\\"borderless\\":false,\\"printQuality\\":\\"normal\\",\\"paperSource\\":\\"front2\\",\\"colorMode\\":\\"mono\\",\\"doubleSided\\":\\"none\\",\\"reverseOrder\\":false,\\"copies\\":1,\\"collate\\":true}}"
+
+};
+
+$.ajax(settings).done(function (response) {
+
+  console.log(response);
+
+});
+
+
+
+**REQUEST**
+
+**REQUEST BODYapplication/json**
+
+{
+
+  "fromJobId": "886ba15084e744c98d9913786bbaf1ac",
+
+  "jobName": "sample",
+
+  "printSettings": {
+
+    "paperSize": "ps_a4",
+
+    "paperType": "pt_plainpaper",
+
+    "borderless": false,
+
+    "printQuality": "normal",
+
+    "paperSource": "front2",
+
+    "colorMode": "mono",
+
+    "doubleSided": "none",
+
+    "reverseOrder": false,
+
+    "copies": 1,
+
+    "collate": true
+
+  }
+
+}
+
+
+
+### response
+
+{
+
+  "jobId": "3cc7e49c9bfaf78c1f864353ccba1dd6"
+
+}
+
+
+
+## **12\. Token Endpoint auth**
+
+POST
+
+```
+https://auth.epsonconnect.com/auth/token
+```
+
+**Request header**
+
+| **Header Name** | **value** | 
+|---|---|
+| Authorization | Basic | 
+| Content-Type | application/x-www-form-urlencoded | 
+
+**Request body**
+
+```
+grant_type=authorization_code&code={authorizatioin_code}&redirect_uri={redirect_uri}&client_id={client_id}
+```
+
+**Response body**
+
+```
+{
+    "access_token": "U2e5jzamUswohttKRVnbqv2IVFvDMB2R9c-JJ-sxgf0",
+    "refresh_token": "B3QRR2D-Dfvm30ntuuaBZq6SRreNON0JkA07V-YIwvs",
+    "scope": "device",
+    "token_type": "Bearer",
+    "expires_in": 3600
+}
+```
+
+
+
+
+
+## 13\. **Token Endpoint refresh**
+
+POST
+
+```
+https://auth.epsonconnect.com/auth/token
+```
+
+**Request header**
+
+| **Header Name** | **value** | 
+|---|---|
+| Authorization | Basic format authentication information (Client ID: Client secret) | 
+| Content-Type | application/x-www-form-urlencoded | 
+
+**Request body**
+
+```
+grant_type=refresh_token&refresh_token={refresh_token}
+```
+
+**Response body**
+
+```
+{
+    "access_token": "Sowof7oz47eWiRfYObIDMjZ0DiWatmIxJA3ckE3qTNQ",
+    "refresh_token": "RQKtU0W-a9d1Y94oJKyQbZWkewA1NBRjsq1-KsMbxAo",
+    "scope": "device",
+    "token_type": "Bearer",
+    "expires_in": 3600
+}
+```
+
+
