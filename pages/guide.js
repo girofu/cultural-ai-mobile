@@ -8,6 +8,7 @@ import layoutStyles from "../styles/Layout.module.css";
 
 export default function Guide() {
   const router = useRouter();
+  const { mode } = router.query;
   const [selectedGuide, setSelectedGuide] = useState(0);
 
   const guides = [
@@ -33,7 +34,7 @@ export default function Guide() {
   };
 
   const handleSelectGuide = () => {
-    router.push("/guide-intro");
+    router.push(`/guide-intro?mode=${mode || "fixed"}`);
   };
 
   return (

@@ -47,7 +47,7 @@ export default function NavigationMode() {
         <div className="w-full space-y-8 px-4">
           <div
             className="flex flex-col items-center cursor-pointer mb-[103px]"
-            onClick={() => router.push("/guide")}
+            onClick={() => router.push("/guide?mode=fixed")}
           >
             <div className={`${styles.optionContainer} opacity-80`}>
               <img
@@ -61,7 +61,7 @@ export default function NavigationMode() {
 
           <div
             className="flex flex-col items-center cursor-pointer"
-            onClick={() => router.push("/guide-start")}
+            onClick={() => router.push("/guide-start?mode=explore")}
           >
             <div className={`${styles.optionContainer} opacity-80`}>
               <img

@@ -26,7 +26,7 @@ export default function GuideEnd() {
 
   const handleEndGuide = () => {
     // 實現結束導覽的導向
-    router.push("/guide");
+    router.push("/");
   };
 
   const handleBackToGuide = () => {

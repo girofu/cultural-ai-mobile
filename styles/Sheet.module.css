@@ -80,7 +80,7 @@
 .regenerateButtonContainer {
   position: absolute;
   top: 28px;
-  left: 244px;
+  left: 200px;
   z-index: 110;
 }
 
@@ -124,7 +124,7 @@
 .printButtonContainer {
   position: absolute;
   top: 28px;
-  left: 309px;
+  left: 280px;
   z-index: 110;
 }
 

@@ -6,11 +6,15 @@ import TypingEffect from "../components/TypingEffect";
 
 export default function GuideStart() {
   const router = useRouter();
+  const { mode } = router.query;
+  const isExploreMode = mode === "explore";
+
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content:
-        "阿～您好！\n\n我是茶農阿伯，有超過50年製茶經驗喔。\n\n今天我要帶您了解茶葉的世界。\n\n我們有四個主題可以聊：\n\n1. 台灣木製出口茶箱\n2. 40~80年代製茶工具\n3. 茶葉的秤重與標價\n4. 包種茶的介紹\n\n您對哪個主題比較有興趣呢？\n\n隨時告訴我，阿伯很樂意為您解說喔！",
+      content: isExploreMode
+        ? "阿～您好！\n\n我是茶農阿伯，有超過50年製茶經驗，同時也是新芳春茶行的資深導覽員。\n\n很高興今天能跟您聊聊茶葉和新芳春茶行的事情！\n\n您有什麼想了解的嗎？可以問我關於茶葉、茶文化、製茶流程或是新芳春茶行的任何問題喔！"
+        : "阿～您好！\n\n我是茶農阿伯，有超過50年製茶經驗喔，同時也是新芳春茶行的資深導覽員。\n\n今天我要帶您了解新芳春茶行和茶葉的世界，我們有九個主題可以聊：\n\n1. 參觀資訊（開放時間、收費說明、特殊服務項目）\n2. 新芳春茶行的歷史\n3. 建築特色與空間配置\n4. 茶葉工廠介紹（揀梗間、風選間、焙茶間）\n5. 新芳春製茶流程\n6. 台灣木製出口茶箱\n7. 40~80年代製茶工具\n8. 茶葉的秤重與標價\n9. 包種茶的介紹\n\n您想先從哪個開始呢？可以直接說出主題名稱或輸入編號(1-9)喔！",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +50,10 @@ export default function GuideStart() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({
+          messages: updatedMessages,
+          exploreMode: isExploreMode,
+        }),
       });
 
       if (!response.ok) {

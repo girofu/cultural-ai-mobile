@@ -307,7 +307,7 @@ export default function Sheet() {
             <div className={styles.personalInfo}>
               <div className={styles.avatar}>
                 <img
-                  src="/images/all/avatar_placeholder.png"
+                  src="/images/all/profile.png"
                   alt="個人頭像"
                   className={styles.avatarImage}
                 />
@@ -469,7 +469,7 @@ export default function Sheet() {
             <div className={styles.aiCommentContainer}>
               <div className={styles.aiAvatar}>
                 <img
-                  src="/images/all/tea_abe_small.png"
+                  src="/images/all/tea_farmer_image.svg"
                   alt="茶農阿伯"
                   className={styles.aiAvatarImage}
                 />
