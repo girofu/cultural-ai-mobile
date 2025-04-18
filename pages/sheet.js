@@ -10,6 +10,7 @@ export default function Sheet() {
   const contentRef = useRef(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [printMessage, setPrintMessage] = useState(null);
+  const [deviceId, setDeviceId] = useState(null);
 
   useEffect(() => {
     // 確保環境變數已經設定
@@ -19,7 +20,43 @@ export default function Sheet() {
     ) {
       console.warn("未設定 EPSON_API_KEY 環境變數");
     }
-  }, []);
+
+    // 從localStorage中獲取設備ID
+    const savedDeviceId = localStorage.getItem("epsonDeviceId");
+    if (savedDeviceId) {
+      setDeviceId(savedDeviceId);
+      epsonPrintService.deviceId = savedDeviceId;
+    }
+
+    // 從URL中獲取授權碼
+    const { query } = router;
+    if (query.code) {
+      console.log("從URL獲取授權碼:", query.code.substring(0, 6) + "...");
+      epsonPrintService.authCode = query.code;
+
+      // 嘗試獲取設備令牌並保存設備ID
+      const redirectUrl = window.location.origin + "/sheet";
+      epsonPrintService
+        .getDeviceToken(null, null, query.code, redirectUrl)
+        .then(() => {
+          if (epsonPrintService.deviceId) {
+            setDeviceId(epsonPrintService.deviceId);
+            localStorage.setItem("epsonDeviceId", epsonPrintService.deviceId);
+          }
+        })
+        .catch((error) => {
+          console.error("獲取設備令牌失敗:", error);
+          setPrintMessage({
+            type: "error",
+            text: "無法連接到印表機，請重新嘗試",
+          });
+        });
+
+      // 清除URL中的授權碼
+      const cleanUrl = window.location.pathname;
+      router.replace(cleanUrl, undefined, { shallow: true });
+    }
+  }, [router]);
 
   const handleMenu = () => {
     router.push("/");
@@ -84,13 +121,62 @@ export default function Sheet() {
       `;
       simplifiedContent.appendChild(infoSection);
 
-      // 呼叫 Epson 列印服務
-      const result = await epsonPrintService.printContent(simplifiedContent);
+      // 檢查設備連接狀態
+      if (!deviceId && !epsonPrintService.deviceId) {
+        // 未連接設備，需要先獲取授權
+        setPrintMessage({ type: "info", text: "請先連接印表機" });
 
-      if (result.success) {
-        setPrintMessage({ type: "success", text: "列印請求已發送" });
-      } else {
-        setPrintMessage({ type: "error", text: `列印錯誤: ${result.message}` });
+        // 生成授權URL並重定向
+        const redirectUrl = window.location.origin + "/sheet";
+        const authUrl = epsonPrintService.generateAuthUrl(null, redirectUrl);
+
+        if (authUrl) {
+          // 延遲1秒後跳轉，給用戶時間查看信息
+          setTimeout(() => {
+            window.location.href = authUrl;
+          }, 1000);
+        } else {
+          throw new Error("無法生成授權URL");
+        }
+        return;
+      }
+
+      // 使用設備ID獲取token並列印
+      try {
+        // 確保有有效的token
+        await epsonPrintService.ensureValidToken();
+
+        // 呼叫 Epson 列印服務
+        const result = await epsonPrintService.printContent(simplifiedContent);
+
+        if (result.success) {
+          setPrintMessage({ type: "success", text: "列印請求已發送" });
+        } else {
+          setPrintMessage({ type: "error", text: `列印錯誤: ${result.error}` });
+        }
+      } catch (error) {
+        console.error("列印過程中發生錯誤:", error);
+
+        // 若token失效，嘗試重新獲取授權
+        if (error.message.includes("無法獲取有效的設備令牌")) {
+          setPrintMessage({
+            type: "error",
+            text: "連接已過期，請重新連接印表機",
+          });
+
+          // 清除本地存儲的設備ID
+          localStorage.removeItem("epsonDeviceId");
+          setDeviceId(null);
+          epsonPrintService.deviceId = null;
+
+          // 延遲1秒後重新嘗試列印，將會重定向到授權頁
+          setTimeout(() => {
+            handlePrint();
+          }, 1000);
+          return;
+        }
+
+        setPrintMessage({ type: "error", text: `列印錯誤: ${error.message}` });
       }
     } catch (error) {
       console.error("列印過程中發生錯誤:", error);

@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+.container {
+  padding: 0 20px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.main {
+  min-height: 100vh;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 2rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* 配置部分樣式 */
+.configSection {
+  width: 100%;
+  max-width: 800px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.configForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.configItem {
+  flex: 1;
+  min-width: 250px;
+}
+
+.configLabel {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.configInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.configButton {
+  background-color: #4a76c2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  height: 40px;
+  transition: background-color 0.2s;
+}
+
+.configButton:hover {
+  background-color: #3a5c99;
+}
+
+.configButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.configStatus {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e8f4f8;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #0067b8;
+}
+
+/* 設備信息樣式 */
+.deviceInfo {
+  width: 100%;
+  max-width: 800px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.infoItem:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 500;
+  color: #555;
+}
+
+.value {
+  color: #333;
+  text-align: right;
+  font-family: monospace;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.connected {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.disconnected {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* 操作按鈕樣式 */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+}
+
+.actionButton {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 15px;
+  background-color: #4a76c2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.actionButton:hover {
+  background-color: #3a5c99;
+}
+
+.actionButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  background-color: #dc3545;
+}
+
+.resetButton:hover {
+  background-color: #c82333;
+}
+
+/* 日誌樣式 */
+.logContainer {
+  width: 100%;
+  max-width: 800px;
+  background-color: #2b2b2b;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logContainer h2 {
+  color: #f8f9fa;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.logs {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #1e1e1e;
+  border-radius: 6px;
+}
+
+.logEntry {
+  margin-bottom: 5px;
+  line-height: 1.5;
+  color: #ddd;
+  word-break: break-word;
+}
+
+.logTime {
+  color: #888;
+  margin-right: 8px;
+}
+
+.errorLog {
+  color: #ff6b6b;
+}
+
+.emptyLog {
+  color: #888;
+  text-align: center;
+  padding: 20px;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .configForm {
+    flex-direction: column;
+  }
+  
+  .configItem {
+    width: 100%;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .actionButton {
+    width: 100%;
+  }
+} 
