@@ -36,7 +36,7 @@ export default function Sheet() {
     setPrintSettings(null);
     setSettingsAdjustments([]);
     setShowDetailedLogs(false);
-    setIsDemoMode(false);
+    setIsDemoMode(true);
   };
 
   // 記錄列印日誌
@@ -129,88 +129,8 @@ export default function Sheet() {
 
   // 確認列印
   const confirmPrint = async () => {
-    // 如果是 Demo 模式，使用 printDemo 函數
-    if (isDemoMode) {
-      await printDemo();
-      return;
-    }
-
-    try {
-      setIsPrinting(true);
-      setPrintStatus("正在準備列印...");
-      logPrint("開始處理列印請求");
-
-      // 獲取當前頁面的URL
-      const pageUrl = window.location.href;
-      logPrint(`使用頁面URL: ${pageUrl}`);
-
-      // 獲取設備資訊
-      logPrint("發送列印請求到伺服器");
-      const response = await fetch("/api/epson-print", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ pageUrl }),
-      });
-
-      const data = await response.json();
-
-      // 設置列印階段記錄
-      if (data.printLog && data.printLog.stages) {
-        setPrintStages(data.printLog.stages);
-
-        // 記錄每個階段到日誌
-        data.printLog.stages.forEach((stage) => {
-          const statusType = stage.status === "error" ? "error" : "info";
-          logPrint(`${stage.name}: ${stage.status}`, statusType);
-        });
-      }
-
-      // 處理列印設定和調整
-      if (data.printSettings) {
-        setPrintSettings(data.printSettings);
-        logPrint("已根據印表機能力優化列印設定", "info");
-      }
-
-      if (data.settingsAdjustments && data.settingsAdjustments.length > 0) {
-        setSettingsAdjustments(data.settingsAdjustments);
-        logPrint(
-          `列印設定已進行 ${data.settingsAdjustments.length} 項調整`,
-          "info"
-        );
-      }
-
-      if (!response.ok) {
-        // 設置詳細的錯誤信息
-        setPrintError({
-          code: data.code || "UNKNOWN_ERROR",
-          message: data.error || "列印失敗",
-          details: data.printLog || null,
-        });
-
-        logPrint(`錯誤代碼: ${data.code || "UNKNOWN_ERROR"}`, "error");
-        logPrint(`錯誤訊息: ${data.error || "列印失敗"}`, "error");
-        throw new Error(data.error || "列印失敗");
-      }
-
-      setPrintStatus("列印任務已成功提交!");
-      logPrint("列印任務已成功提交!", "success");
-
-      if (data.jobId) {
-        logPrint(`列印工作ID: ${data.jobId}`, "success");
-      }
-
-      if (data.deviceInfo) {
-        logPrint(`印表機: ${data.deviceInfo.productName || "未知"}`, "info");
-      }
-
-      // 顯示成功訊息後不自動關閉，讓用戶可以查看詳細資訊
-    } catch (error) {
-      setPrintStatus(`列印失敗: ${error.message}`);
-      logPrint(`列印失敗: ${error.message}`, "error");
-      console.error("列印時發生錯誤:", error);
-    }
+    // 直接使用 Demo 模式列印
+    await printDemo();
   };
 
   // 取消列印
@@ -641,28 +561,6 @@ export default function Sheet() {
             ) : (
               <>
                 <p className={styles.modalText}>您確定要列印這份學習單嗎？</p>
-                <div className={styles.printModeOptions}>
-                  <div className={styles.printModeOption}>
-                    <input
-                      type="radio"
-                      id="normalMode"
-                      name="printMode"
-                      checked={!isDemoMode}
-                      onChange={() => setIsDemoMode(false)}
-                    />
-                    <label htmlFor="normalMode">正常列印</label>
-                  </div>
-                  <div className={styles.printModeOption}>
-                    <input
-                      type="radio"
-                      id="demoMode"
-                      name="printMode"
-                      checked={isDemoMode}
-                      onChange={() => setIsDemoMode(true)}
-                    />
-                    <label htmlFor="demoMode">Demo模式 (使用模板)</label>
-                  </div>
-                </div>
                 <div className={styles.modalButtons}>
                   <button
                     className={styles.modalButtonCancel}
