@@ -105,7 +105,7 @@ export default function DesktopPlace() {
         >
           <h1
             style={{
-              fontSize: isMobile ? "2.5rem" : "54px",
+              fontSize: isMobile ? "2rem" : "54px",
               fontWeight: 700,
               lineHeight: "1.2222222222222223em",
               fontFamily: "Inter, sans-serif",
@@ -115,12 +115,12 @@ export default function DesktopPlace() {
           >
             確認您要導覽地點
           </h1>
-          <div style={{ marginLeft: "-22px" }}>
+          <div style={{ marginLeft: "10px" }}>
             <Image
               src="/images/all/interrogation.svg"
               alt="問號圖標"
-              width={isMobile ? 50 : 72}
-              height={isMobile ? 50 : 72}
+              width={isMobile ? 30 : 72}
+              height={isMobile ? 30 : 72}
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function DesktopPlace() {
           <PlaceButton
             text="GPS偵測位置"
             icon="icon_marker"
-            onClick={() => console.log("GPS偵測位置")}
+            onClick={() => router.push("/teahouse")}
             isMobile={isMobile}
           />
         </div>

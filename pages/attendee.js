@@ -56,8 +56,8 @@ const AttendeePage = () => {
             <Image
               src="/images/all/question_icon.svg"
               alt="問號圖標"
-              width={25}
-              height={25}
+              width={30}
+              height={30}
             />
           </div>
         </div>

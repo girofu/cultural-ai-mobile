@@ -35,11 +35,12 @@ export default function NavigationMode() {
       <main className="flex flex-col items-center w-full max-w-md relative pt-20">
         <div className="flex items-center mt-16 mb-8">
           <h1 className={styles.heading}>確認導覽模式</h1>
-          <div className="ml-2">
+          <div className="flex-shrink-0" style={{ marginLeft: "10px", marginTop: "-0.5rem" }}>
             <img
               src="/images/all/interrogation.svg"
               alt="問號"
-              className="w-6 h-6"
+              width={30}
+              height={30}
             />
           </div>
         </div>

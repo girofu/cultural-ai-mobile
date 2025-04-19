@@ -62,7 +62,9 @@ export default function Teahouse() {
             <Link href="/attendee">
               <button className={styles.buttonPrimary}>確認地點</button>
             </Link>
-            <button className={styles.buttonSecondary}>更換地點</button>
+            <Link href="/place">
+              <button className={styles.buttonSecondary}>更換地點</button>
+            </Link>
           </div>
         </div>
       </main>

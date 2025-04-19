@@ -36,7 +36,7 @@
 }
 
 .questionIconContainer {
-  margin-left: 0.25rem; /* ml-1 */
+  margin-left: 1rem; /* ml-1 */
   width: 1.5rem; /* w-6 */
   height: 1.5rem; /* h-6 */
   display: flex;
